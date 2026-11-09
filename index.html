@@ -425,6 +425,20 @@ canvas.conf{position:fixed;inset:0;pointer-events:none;z-index:80;width:100%;hei
 .gr-t{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:4px}
 .gr-t span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
 .pbar.sm{height:7px;margin-top:0}
+
+.gd{display:flex;flex-direction:column;gap:10px}
+.gd-c{display:flex;gap:12px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:14px 15px;animation:enter .45s both}
+.gd-c:nth-child(2){animation-delay:.06s}.gd-c:nth-child(3){animation-delay:.12s}.gd-c:nth-child(4){animation-delay:.18s}
+.gd-i{width:40px;height:40px;border-radius:12px;background:var(--lane-soft);color:var(--lane-ink);display:grid;place-items:center;flex:none}
+.gd-i svg{width:20px;height:20px}
+.gd-c b{display:block;font-size:16px;font-weight:800;margin-bottom:3px}
+.gd-c p,.gd-c li{font-size:14.5px;line-height:1.6;color:var(--fg2)}
+.gd-c ul{margin:4px 0 0;padding-inline-start:18px}
+.gd-c li b{display:inline;font-size:inherit;margin:0;color:var(--fg)}
+.gd-c p b{display:inline;font-size:inherit;margin:0;color:var(--fg)}
+.gd-flow{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:8px}
+.gd-flow span{background:var(--green-soft);color:var(--green-ink);border-radius:8px;padding:4px 9px;font-size:12.5px;font-weight:800}
+.gd-flow i{font-style:normal;color:var(--muted);font-weight:900;font-size:12px}
 /* flip cards */
 .flips{display:grid;gap:10px}
 .flips.c2{grid-template-columns:1fr 1fr}
@@ -534,13 +548,15 @@ const EMB='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAQAAAD2e2DtAAB
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-const KEY='lomda-mivchan-maasi-v4';
+const KEY='lomda-mivchan-maasi-v5';
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ================= icons ================= */
 const I={
  flip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.3-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.3 6.4L3 16"/><path d="M3 21v-5h5"/></svg>',
  mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+ clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+ target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>',
  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M8 7h7"/></svg>',
  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
@@ -863,7 +879,7 @@ const SHEET=[
   {t:'מביט לאחור לפני הנסיעה לאחור',type:0,w:15,why:'או שהביט או שלא – אין ביצוע חלקי.',n:'לא – הסתמך על המראות בלבד ולא סובב את הראש.'},
   {t:'חונה בתוך שטח החניה המסומן',type:1,w:25,why:'יש רמות ביצוע – חניה יכולה להיות מדויקת יותר או פחות.',n:'5 – בתוך הקווים וישר · 4 – בתוך הקווים, מעט עקום · 3 – נוגע בקו · 2 – חורג מהקו · 1 – מחוץ לשטח המסומן.'},
   {t:'ללא פגיעה בגופים חיצוניים',type:0,w:20,why:'או שהייתה פגיעה או שלא.',n:'לא – פגע במדרכה, ברכב או בבעל חיים, גם בנגיעה קלה.'},
-  {t:'משלים את החניה בעד 3 תיקוני תמרון',type:0,w:10,why:'הקריטריון מגדיר סף ברור – עמד בו או לא עמד בו.',n:'לא – נדרשו 4 תיקונים ומעלה.'},
+  {t:'משלים את החניה עד 3 תיקוני תמרון',type:0,w:10,why:'הקריטריון מגדיר סף ברור – עמד בו או לא עמד בו.',n:'לא – נדרשו 4 תיקונים ומעלה.'},
   {t:'עוצר ונותן להולך הרגל (המסמלץ) לעבור',type:0,w:15,cx:1,why:'או שעצר ונתן לעבור או שלא.',n:'לא – המשיך בתמרון כשהולך הרגל חצה.'}
 ];
 
@@ -892,14 +908,33 @@ add({id:'open',strict:true,part:'לומדה מבחן מעשי',sub:'סדנת מ�
   chk();
 },next(){const v=$('#nm').value.trim();if(v.length<2)return;S.name=v;save();go(1);}});
 
+/* --- learner instructions --- */
+add({id:'guide',part:'הוראות הלומדה',sub:'לפני שמתחילים',render(m){
+  m.innerHTML=`<span class="kicker">${I.book}הוראות הלומדה</span>
+  <h1 class="h1">${S.name?S.name.split(' ')[0]+', ':''}לפני שמתחילים</h1>
+  <div class="gd">
+    <div class="gd-c"><span class="gd-i">${I.target}</span><div><b>מטרת הלומדה</b><p>לבנות מבחן מעשי על פי העקרונות לבניית מבחן. בסוף הלומדה תוכל:</p><ul><li>להסביר אילו מיומנויות ניתן לבחון באמצעות מבחן מעשי</li><li>להסביר את השלבים לבניית מבחן מעשי</li><li>להסביר את העקרונות לניהול מבחן מעשי</li></ul></div></div>
+    <div class="gd-c"><span class="gd-i">${I.clock}</span><div><b>כמה זמן</b><p>כ-40 דקות. אפשר לצאת באמצע – ההתקדמות נשמרת, ובכניסה הבאה תמשיך מהמקום שעצרת (באותו מכשיר ובאותו דפדפן).</p></div></div>
+    <div class="gd-c"><span class="gd-i">${I.flag}</span><div><b>מה הולך להיות</b><p>נבנה יחד טסט לנהג, לפי ששת השלבים לבניית מבחן מעשי:</p>
+      <div class="gd-flow"><span>יסודות</span><i>←</i><span>6 שלבים</span><i>←</i><span>אתגר מסכם</span><i>←</i><span>סיכום וציון</span></div>
+      <p class="mt" style="margin-top:8px">בכל שלב: קודם <b>הסבר</b>, ואחריו <b>תרגול</b> על הטסט של הנהג.</p></div></div>
+    <div class="gd-c"><span class="gd-i">${I.check}</span><div><b>מה נדרש כדי לעבור</b><ul>
+      <li>בעמודי ההסבר – <b>לפתוח את כל הכרטיסיות</b> (מונה מעל כפתור ההמשך מראה כמה נותרו).</li>
+      <li>בעמודי התרגול – <b>להשלים את התרגול</b>. טעית? תקבל הסבר ותוכל לנסות שוב.</li>
+      <li>בסוף – <b>אתגר מסכם</b> של 8 שאלות.</li>
+      <li>במסך הסיכום יוצג אחוז ההצלחה שלך בכל הלומדה, לפי <b>הניסיון הראשון</b> בכל תרגול ושאלה.</li></ul></div></div>
+  </div>
+  ${say('אני אבי, בוחן ראשי. אלווה אותך לאורך כל הדרך. מוכן? יוצאים לדרך.','point')}`;
+  setDone(true);
+}});
+
 /* --- mission + goals --- */
 add({id:'mission',part:'פתיחה',sub:'המשימה',render(m){
   m.innerHTML=`<span class="kicker">${I.flag}המשימה</span>
   <h1 class="h1">${S.name?S.name.split(' ')[0]+', ':''}בונים טסט חדש לנהגים</h1>
   <div class="mission"><div class="mh">${I.flag}פנייה ממשרד התחבורה</div><div class="mb">לאור כמות תאונות הדרכים בקרב נהגים חדשים, משרד התחבורה מצא כי הכשרת הנהגים הקיימת אינה נותנת מענה הולם לצורך. הועלתה פנייה מעמותת "אור ירוק" לבניית הכשרה חדשה לנהגים.<br><br><b>המשימה שלך: לבנות לנהג מבחן מעשי – טסט – לפי העקרונות לבניית מבחן.</b></div></div>
   <div class="big-avi" style="margin-top:14px">${avi('point')}</div>
-  ${say('אני אבי, בוחן ראשי במרכז הטסטים. אלווה אותך בכל ששת השלבים. בכל שלב – קודם הסבר, אחר כך תרגול על הטסט של הנהג.','point')}
-  <div class="card"><h3>בסוף הלומדה תוכל</h3><p>• לבנות מבחן מעשי על פי העקרונות לבניית מבחן<br>• להסביר אילו מיומנויות ניתן לבחון באמצעות מבחן מעשי<br>• להסביר את השלבים לבניית מבחן מעשי<br>• להסביר את העקרונות לניהול מבחן מעשי</p></div>`;
+  ${say('זו המשימה שלנו. נתחיל ביסודות – מה זה מבחן ומה אפשר לבחון בו – ואז נעבור שלב אחרי שלב.','point')}`;
   setDone(true);
 }});
 
@@ -1062,7 +1097,7 @@ add({id:'s2t',st:2,part:'שלב 2 · מרכיבי תפקיד',sub:'תרגול ·
   setDone(false,'מקם את כל 5 הפריטים');
 }});
 add({id:'s2c',st:2,part:'שלב 2 · מרכיבי תפקיד',sub:'תרגול · קריטריונים',render(m){
-  m.innerHTML=`${stationHead(2,'בחר קריטריונים','תרגול')}
+  m.innerHTML=`${stationHead(2,'בחר את הקריטריונים הרלוונטיים','תרגול')}
   ${learnedBox(['קריטריון טוב: פשוט ומתומצת – פעולה אחת בכל קריטריון','בר צפייה – הבוחן רואה אותו קורה','כולל פעולות נחוצות בלבד'])}
   <div class="card mt"><span class="kicker g" style="margin-bottom:6px">מרכיב תפקיד</span><h3>חניית הרכב במקביל</h3><p>אילו מהניסוחים הם קריטריונים טובים לטסט? סמן את כולם, ולחץ "בדיקה".</p></div>
   <div class="pk mt"></div>`;
@@ -1074,7 +1109,7 @@ add({id:'s2c',st:2,part:'שלב 2 · מרכיבי תפקיד',sub:'תרגול ·
     {t:'מבין את חשיבות החניה הנכונה',why:'הבנה היא לא פעולה שאפשר לצפות בה.'},
     {t:'ללא פגיעה בגופים חיצוניים',ok:1,why:'בר צפייה ונחוץ לביצוע בטוח.'},
     {t:'מאותת ובודק במראות לפני הכניסה לחניה',why:'שתי פעולות שונות בקריטריון אחד – צריך לפצל לשני קריטריונים.'},
-    {t:'משלים את החניה בעד 3 תיקוני תמרון',ok:1,why:'פשוט, ברור ובר צפייה.'},
+    {t:'משלים את החניה עד 3 תיקוני תמרון',ok:1,why:'פשוט, ברור ובר צפייה.'},
     {t:'חונה יפה',why:'לא מפורט – כל בוחן יבין "יפה" אחרת.'}
   ],()=>{$('.pk',m).insertAdjacentHTML('beforeend',say('חמשת הקריטריונים האלה ייכנסו לדף התצפית (מחוון) שלך בשלב הבא.','happy'));setDone(true);});
   setDone(false,'סמן ובדוק');
@@ -1090,21 +1125,8 @@ add({id:'s3l',st:3,part:'שלב 3 · דף תצפית (מחוון)',sub:'הסבר
   ])}</div>
   <div class="sec-t">דוגמה: עצירה בתמרור "עצור"</div>
   <div class="ex-doc"><span class="lbl">אותה פעולה – שתי דרכים לנקד</span><b>ציון דיכוטומי:</b> האם הנבחן עצר עצירה מוחלטת לפני הקו? ← בוצע / לא בוצע<br><b>ציון בעל מספר:</b> מיקום העצירה ביחס לקו – עצר לפני הקו: 5 נק' · עצר סמוך לקו: 3 נק' · עצר אחרי הקו: 0 נק'<br><b>החלטה נוספת:</b> יש להכריע אם אי-עצירה פוסלת לחלוטין את הנבחן או רק מורידה את ציונו.</div>
-  ${say('השאלה שתשאל את עצמך: <b>האם אפשר להצליח חלקית?</b> אם לא – דיכוטומי. אם כן – בעל מספר.','think')}`;
+  ${say('השאלה שתשאל את עצמך: <b>האם אפשר להצליח חלקית?</b> אם לא – דיכוטומי. אם כן – בעל מספר. את זה תתרגל כשתבנה את דף התצפית.','think')}`;
   wireFlips(m);setDone(true);
-}});
-add({id:'s3lp',st:3,part:'שלב 3 · דף תצפית (מחוון)',sub:'תרגול · ציינון',render(m){
-  m.innerHTML=`${stationHead(3,'איך תנקד?','תרגול')}
-  ${learnedBox(['דיכוטומי – כן/לא, בוצע/לא בוצע','בעל מספר – כשאפשר להצליח חלקית (סקאלה או אחוזים)'])}
-  <div class="callout mt"><b>${I.book}שים לב – בציון בעל מספר</b><p>על מנת לשמור על הערכה דומה בין מעריכים, נוסיף הערות שמפרטות על אילו ביצועים מורידים נקודות – כך כל בוחן ינקד באותה דרך. זה נקרא <b>מהימנות בין מעריכים</b>.</p></div>
-  <div class="ex mt"></div>`;
-  classify($('.ex',m),[
-    {t:'חגירת חגורת בטיחות לפני תחילת הנסיעה',c:0,why:'או שחגר או שלא – אין ביצוע חלקי.'},
-    {t:'הדלקת אורות בנסיעה בשעת דמדומים',c:0,why:'או שהדליק או שלא – אין ביצוע חלקי.'},
-    {t:'דיוק החניה בתוך שטח החניה המסומן',c:1,why:'אפשר להצליח חלקית – למשל חניה עקומה בתוך הקווים.',bad:'כאן אפשר להצליח חלקית – חניה יכולה להיות מדויקת יותר או פחות.'},
-    {t:'מספר תיקוני התמרון בזמן החניה',c:1,why:'יש טווח של ביצוע – מתאים לניקוד מספרי.',bad:'יש כאן טווח (0, 1, 2, 3 תיקונים) – לא רק כן/לא.'}
-  ],['דיכוטומי','בעל מספר'],()=>setDone(true));
-  setDone(false,'סווג את כל הקריטריונים');
 }});
 add({id:'s3xl',st:3,part:'שלב 3 · דף תצפית (מחוון)',sub:'הסבר · גורמים מסבכים',render(m){
   m.innerHTML=`${stationHead(3,'הוספת גורמים מסבכים','הסבר')}
@@ -1159,7 +1181,7 @@ add({id:'s3s',strict:true,st:3,part:'שלב 3 · דף תצפית (מחוון)',s
   const W=(S.w&&S.w.length===SHEET.length)?S.w:SHEET.map(()=>0);
   const types=SHEET.map(()=>null);
   m.innerHTML=`${stationHead(3,'בנה את דף התצפית (מחוון)','תרגול')}
-  ${learnedBox(['דיכוטומי – פעולה שאפשר לבצע או לא לבצע','בעל מספר – פעולה שיש בה רמות ביצוע','שקלול: לכל קריטריון משקל, הסכום 100%'])}
+  ${learnedBox(['דיכוטומי – פעולה שאפשר לבצע או לא לבצע (כן/לא)','בעל מספר – פעולה שאפשר להצליח בה חלקית; מוסיפים הערות על מה מורידים נקודות (מהימנות בין מעריכים)','שקלול: לכל קריטריון משקל, הסכום 100%'])}
   <div class="stepbar mt"><span class="sb on" id="sb1"><i>1</i>סוג ציון</span><span class="sbl"></span><span class="sb" id="sb2"><i>2</i>חלוקת משקלים</span><span class="sbl"></span><span class="sb" id="sb3"><i>3</i>הדף הסופי</span></div>
   <div class="sec-t">שלב ראשון · בחר סוג ציון לכל קריטריון</div>
   <div class="tp"></div>
